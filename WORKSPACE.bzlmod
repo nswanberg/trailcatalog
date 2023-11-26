@@ -1,6 +1,12 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.25.0/rules_docker-v0.25.0.tar.gz"],
+)
+
+http_archive(
     name = "io_tweag_rules_nixpkgs",
     strip_prefix = "rules_nixpkgs-62d63740061dd94ecee3ec2c0cfc8a7ed409b98c",
     urls = ["https://github.com/tweag/rules_nixpkgs/archive/62d63740061dd94ecee3ec2c0cfc8a7ed409b98c.tar.gz"],
@@ -70,10 +76,13 @@ rules_closure_dependencies(
 
 rules_closure_toolchains()
 
-# TODO: Migrated to Bzlmod
-local_repository(
-  name = "com_google_j2cl",
-  path = "../j2cl",
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# temporarily load from j2cl fork that builds in Bazel 6
+git_repository(
+    name = "com_google_j2cl",
+    remote = "git@github.com:nswanberg/j2cl.git",
+    branch = "build-in-bazel-6",
 )
 
 http_archive(
